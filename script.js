@@ -1,5 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
-  document.addEventListener("dragstart", (e) => e.preventDefault());
+  document.addEventListener("dragstart", (e) => {
+    e.preventDefault();
+  });
 
   const cursor = document.getElementById("cursor");
 
@@ -68,8 +70,10 @@ document.addEventListener("DOMContentLoaded", () => {
   let entered = false;
 
   audio.volume = 0.5;
-  volume.style.setProperty("--fill", "50%");
+  volume.value = 50;
+
   progress.style.setProperty("--fill", "0%");
+  volume.style.setProperty("--fill", "50%");
 
   function formatTime(time) {
     if (!time || isNaN(time)) return "0:00";
@@ -84,14 +88,26 @@ document.addEventListener("DOMContentLoaded", () => {
     if (audio.muted || audio.volume === 0) {
       volumeIcon.className = "fa-solid fa-volume-xmark";
     } else if (audio.volume <= 0.33) {
-      volumeIcon.className = "fa-solid fa-volume-off";
-    } else if (audio.volume <= 0.66) {
       volumeIcon.className = "fa-solid fa-volume-low";
+    } else if (audio.volume <= 0.66) {
+      volumeIcon.className = "fa-solid fa-volume";
     } else {
       volumeIcon.className = "fa-solid fa-volume-high";
     }
 
     volume.style.setProperty("--fill", `${volume.value}%`);
+  }
+
+  function updateProgress() {
+    const percent = audio.duration
+      ? (audio.currentTime / audio.duration) * 100
+      : 0;
+
+    progress.value = percent;
+    progress.style.setProperty("--fill", `${percent}%`);
+
+    current.textContent = formatTime(audio.currentTime);
+    duration.textContent = formatTime(audio.duration);
   }
 
   async function playAudio() {
@@ -120,7 +136,9 @@ document.addEventListener("DOMContentLoaded", () => {
   enterScreen.addEventListener("click", enterSite);
 
   document.addEventListener("keydown", () => {
-    if (!entered) enterSite();
+    if (!entered) {
+      enterSite();
+    }
   });
 
   playPause.addEventListener("click", () => {
@@ -132,28 +150,16 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  audio.addEventListener("loadedmetadata", () => {
-    duration.textContent = formatTime(audio.duration);
-  });
-
-  audio.addEventListener("canplaythrough", () => {
-    duration.textContent = formatTime(audio.duration);
-  });
-
-  audio.addEventListener("timeupdate", () => {
-    const percent = (audio.currentTime / audio.duration) * 100 || 0;
-
-    progress.value = percent;
-    progress.style.setProperty("--fill", `${percent}%`);
-
-    current.textContent = formatTime(audio.currentTime);
-  });
+  audio.addEventListener("loadedmetadata", updateProgress);
+  audio.addEventListener("durationchange", updateProgress);
+  audio.addEventListener("canplay", updateProgress);
+  audio.addEventListener("timeupdate", updateProgress);
 
   progress.addEventListener("input", () => {
     if (!audio.duration) return;
 
     audio.currentTime = (progress.value / 100) * audio.duration;
-    progress.style.setProperty("--fill", `${progress.value}%`);
+    updateProgress();
   });
 
   volume.addEventListener("input", () => {
@@ -171,7 +177,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (audio.muted || audio.volume === 0) {
       audio.muted = false;
       audio.volume = previousVolume || 0.5;
-      volume.value = audio.volume * 100;
+      volume.value = Math.round(audio.volume * 100);
     } else {
       previousVolume = audio.volume;
       audio.muted = true;
@@ -181,5 +187,6 @@ document.addEventListener("DOMContentLoaded", () => {
     updateVolumeIcon();
   });
 
+  updateProgress();
   updateVolumeIcon();
 });
