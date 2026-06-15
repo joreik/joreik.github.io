@@ -84,15 +84,15 @@ document.addEventListener("DOMContentLoaded", () => {
   function volumeSvg(level) {
     const waves = {
       muted: "",
-      low: `<path d="M16 9C17 10.2 17 13.8 16 15"/>`,
+      low: `<path d="M18 9C19 10.2 19 13.8 18 15"/>`,
       medium: `
-        <path d="M16 9C17 10.2 17 13.8 16 15"/>
-        <path d="M19 7C21 10 21 14 19 17"/>
+        <path d="M18 9C19 10.2 19 13.8 18 15"/>
+        <path d="M21 7C23 10 23 14 21 17"/>
       `,
       high: `
-        <path d="M16 9C17 10.2 17 13.8 16 15"/>
-        <path d="M19 7C21 10 21 14 19 17"/>
-        <path d="M22 5C25 9 25 15 22 19"/>
+        <path d="M18 9C19 10.2 19 13.8 18 15"/>
+        <path d="M21 7C23 10 23 14 21 17"/>
+        <path d="M24 5C27 9 27 15 24 19"/>
       `
     };
 
