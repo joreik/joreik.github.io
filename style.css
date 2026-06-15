@@ -406,8 +406,8 @@ input[type="range"]::-moz-range-thumb {
 
 #cursor {
   position: fixed;
-  width: 6px;
-  height: 6px;
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
   background: white;
   border: 1px solid black;
