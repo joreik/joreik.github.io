@@ -1,3 +1,38 @@
+document.addEventListener("DOMContentLoaded", () => {
+  document.addEventListener("dragstart", (e) => e.preventDefault());
+
+  const audio = document.getElementById("audio");
+  const playPause = document.getElementById("playPause");
+  const progress = document.getElementById("progress");
+  const current = document.getElementById("current");
+  const duration = document.getElementById("duration");
+  const volume = document.getElementById("volume");
+  const volumeIcon = document.getElementById("volumeIcon");
+  const volumeButton = document.getElementById("volumeButton");
+  const enterScreen = document.getElementById("enter-screen");
+
+  const cursor = document.getElementById("cursor");
+  const card = document.getElementById("tilt-card");
+
+  let previousVolume = 0.5;
+  let entered = false;
+
+  audio.volume = 0.5;
+  volume.value = 50;
+
+  progress.style.setProperty("--fill", "0%");
+  volume.style.setProperty("--fill", "50%");
+
+  if (cursor) {
+    let mouseX = 0;
+    let mouseY = 0;
+    let currentX = 0;
+    let currentY = 0;
+
+    document.addEventListener("mousemove", (e) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+    });
 
     function animateCursor() {
       currentX += (mouseX - currentX) * 0.35;
