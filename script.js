@@ -1,13 +1,9 @@
 document.addEventListener("DOMContentLoaded", () => {
-  document.addEventListener("dragstart", (e) => {
-    e.preventDefault();
-  });
-
-  const isMobile = false;
+  document.addEventListener("dragstart", (e) => e.preventDefault());
 
   const cursor = document.getElementById("cursor");
 
-  if (cursor && !isMobile) {
+  if (cursor) {
     let mouseX = 0;
     let mouseY = 0;
     let currentX = 0;
@@ -33,24 +29,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const card = document.getElementById("tilt-card");
 
-  if (card && !isMobile) {
+  if (card) {
     card.addEventListener("mousemove", (e) => {
       const rect = card.getBoundingClientRect();
 
       const x = e.clientX - rect.left;
       const y = e.clientY - rect.top;
 
-      const centerX = rect.width / 2;
-      const centerY = rect.height / 2;
+      const rotateX = ((y - rect.height / 2) / (rect.height / 2)) * -5;
+      const rotateY = ((x - rect.width / 2) / (rect.width / 2)) * 5;
 
-      const rotateX = ((y - centerY) / centerY) * -5;
-      const rotateY = ((x - centerX) / centerX) * 5;
-
-      const mouseX = (x / rect.width) * 100;
-      const mouseY = (y / rect.height) * 100;
-
-      card.style.setProperty("--mouse-x", `${mouseX}%`);
-      card.style.setProperty("--mouse-y", `${mouseY}%`);
+      card.style.setProperty("--mouse-x", `${(x / rect.width) * 100}%`);
+      card.style.setProperty("--mouse-y", `${(y / rect.height) * 100}%`);
 
       card.style.transform = `
         rotateX(${rotateX}deg)
@@ -78,6 +68,8 @@ document.addEventListener("DOMContentLoaded", () => {
   let entered = false;
 
   audio.volume = 0.5;
+  volume.style.setProperty("--fill", "50%");
+  progress.style.setProperty("--fill", "0%");
 
   function formatTime(time) {
     if (!time || isNaN(time)) return "0:00";
@@ -89,17 +81,17 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function updateVolumeIcon() {
-    volumeIcon.classList.remove("volume-muted", "volume-low", "volume-medium", "volume-high");
-
     if (audio.muted || audio.volume === 0) {
-      volumeIcon.classList.add("volume-muted");
+      volumeIcon.className = "fa-solid fa-volume-xmark";
     } else if (audio.volume <= 0.33) {
-      volumeIcon.classList.add("volume-low");
+      volumeIcon.className = "fa-solid fa-volume-off";
     } else if (audio.volume <= 0.66) {
-      volumeIcon.classList.add("volume-medium");
+      volumeIcon.className = "fa-solid fa-volume-low";
     } else {
-      volumeIcon.classList.add("volume-high");
+      volumeIcon.className = "fa-solid fa-volume-high";
     }
+
+    volume.style.setProperty("--fill", `${volume.value}%`);
   }
 
   async function playAudio() {
@@ -149,13 +141,19 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   audio.addEventListener("timeupdate", () => {
-    progress.value = (audio.currentTime / audio.duration) * 100 || 0;
+    const percent = (audio.currentTime / audio.duration) * 100 || 0;
+
+    progress.value = percent;
+    progress.style.setProperty("--fill", `${percent}%`);
+
     current.textContent = formatTime(audio.currentTime);
   });
 
   progress.addEventListener("input", () => {
     if (!audio.duration) return;
+
     audio.currentTime = (progress.value / 100) * audio.duration;
+    progress.style.setProperty("--fill", `${progress.value}%`);
   });
 
   volume.addEventListener("input", () => {
