@@ -141,7 +141,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   async function playAudio() {
     try {
-      audio.load();
       await audio.play();
 
       playPause.innerHTML = `<i class="fa-solid fa-pause"></i>`;
