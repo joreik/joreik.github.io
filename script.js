@@ -1,9 +1,27 @@
 document.addEventListener("DOMContentLoaded", () => {
-  document.addEventListener("dragstart", (e) => {
-    e.preventDefault();
-  });
+  document.addEventListener("dragstart", (e) => e.preventDefault());
+
+  const audio = document.getElementById("audio");
+  const playPause = document.getElementById("playPause");
+  const progress = document.getElementById("progress");
+  const current = document.getElementById("current");
+  const duration = document.getElementById("duration");
+  const volume = document.getElementById("volume");
+  const volumeIcon = document.getElementById("volumeIcon");
+  const volumeButton = document.getElementById("volumeButton");
+  const enterScreen = document.getElementById("enter-screen");
 
   const cursor = document.getElementById("cursor");
+  const card = document.getElementById("tilt-card");
+
+  let previousVolume = 0.5;
+  let entered = false;
+
+  audio.volume = 0.5;
+  volume.value = 50;
+
+  progress.style.setProperty("--fill", "0%");
+  volume.style.setProperty("--fill", "50%");
 
   if (cursor) {
     let mouseX = 0;
@@ -28,8 +46,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     animateCursor();
   }
-
-  const card = document.getElementById("tilt-card");
 
   if (card) {
     card.addEventListener("mousemove", (e) => {
@@ -56,25 +72,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  const audio = document.getElementById("audio");
-  const playPause = document.getElementById("playPause");
-  const progress = document.getElementById("progress");
-  const current = document.getElementById("current");
-  const duration = document.getElementById("duration");
-  const volume = document.getElementById("volume");
-  const volumeIcon = document.getElementById("volumeIcon");
-  const volumeButton = document.getElementById("volumeButton");
-  const enterScreen = document.getElementById("enter-screen");
-
-  let previousVolume = 0.5;
-  let entered = false;
-
-  audio.volume = 0.5;
-  volume.value = 50;
-
-  progress.style.setProperty("--fill", "0%");
-  volume.style.setProperty("--fill", "50%");
-
   function formatTime(time) {
     if (!time || isNaN(time)) return "0:00";
 
@@ -84,17 +81,49 @@ document.addEventListener("DOMContentLoaded", () => {
     return `${min}:${sec}`;
   }
 
+  function volumeSvg(level) {
+    const waves = {
+      muted: "",
+      low: `<path d="M16 9C17 10.2 17 13.8 16 15"/>`,
+      medium: `
+        <path d="M16 9C17 10.2 17 13.8 16 15"/>
+        <path d="M19 7C21 10 21 14 19 17"/>
+      `,
+      high: `
+        <path d="M16 9C17 10.2 17 13.8 16 15"/>
+        <path d="M19 7C21 10 21 14 19 17"/>
+        <path d="M22 5C25 9 25 15 22 19"/>
+      `
+    };
+
+    const muteX = `
+      <path d="M18 9L24 15"/>
+      <path d="M24 9L18 15"/>
+    `;
+
+    return `
+      <svg viewBox="0 0 28 24" width="22" height="22" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M3 9V15H8L14 20V4L8 9H3Z" fill="white" stroke="white"/>
+        ${level === "muted" ? muteX : waves[level]}
+      </svg>
+    `;
+  }
+
   function updateVolumeIcon() {
+    let level;
+
     if (audio.muted || audio.volume === 0) {
-      volumeIcon.className = "fa-solid fa-volume-xmark";
+      level = "muted";
     } else if (audio.volume <= 0.33) {
-      volumeIcon.className = "fa-solid fa-volume-low";
+      level = "low";
     } else if (audio.volume <= 0.66) {
-      volumeIcon.className = "fa-solid fa-volume";
+      level = "medium";
     } else {
-      volumeIcon.className = "fa-solid fa-volume-high";
+      level = "high";
     }
 
+    volumeIcon.className = "";
+    volumeIcon.innerHTML = volumeSvg(level);
     volume.style.setProperty("--fill", `${volume.value}%`);
   }
 
@@ -112,8 +141,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
   async function playAudio() {
     try {
+      audio.load();
       await audio.play();
+
       playPause.innerHTML = `<i class="fa-solid fa-pause"></i>`;
+      updateProgress();
     } catch (err) {
       console.error("Audio play error:", err);
       playPause.innerHTML = `<i class="fa-solid fa-play"></i>`;
@@ -124,9 +156,9 @@ document.addEventListener("DOMContentLoaded", () => {
     if (entered) return;
     entered = true;
 
-    await playAudio();
-
     enterScreen.classList.add("hidden");
+
+    await playAudio();
 
     setTimeout(() => {
       enterScreen.style.display = "none";
@@ -136,9 +168,7 @@ document.addEventListener("DOMContentLoaded", () => {
   enterScreen.addEventListener("click", enterSite);
 
   document.addEventListener("keydown", () => {
-    if (!entered) {
-      enterSite();
-    }
+    if (!entered) enterSite();
   });
 
   playPause.addEventListener("click", () => {
