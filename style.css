@@ -408,6 +408,7 @@ input[type="range"]::-moz-range-thumb {
   position: fixed;
   width: 8px;
   height: 8px;
+  border-radius: 50%;
   background: white;
   pointer-events: none;
   z-index: 999999;
