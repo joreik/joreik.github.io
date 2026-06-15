@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Joreik</title>
+
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-0X3Z007DJM"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag("js", new Date());
+    gtag("config", "G-0X3Z007DJM");
+  </script>
+
+  <link rel="icon" type="image/webp" href="assets/favicon.webp">
+  <link rel="shortcut icon" type="image/webp" href="assets/favicon.webp">
+
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+
+<body>
+  <div id="enter-screen">
+    <div id="enter-title">Pocketful of Sunshine</div>
+    <div id="enter-subtitle">click</div>
+  </div>
+
+  <main class="page">
+    <section class="card" id="tilt-card">
+      <div class="shine"></div>
+
+      <div class="views">
+        <i class="fa-solid fa-eye"></i>
+        <span id="visitor-count">...</span>
+      </div>
+
+      <div class="profile">
+        <img src="assets/pfp.png" alt="Profile picture">
+
+        <div class="profile-info">
+          <h1>Joreik</h1>
+          <p>sudo apt install buttplug</p>
+        </div>
+      </div>
+
+      <div class="links">
+        <a class="social-link" href="https://discord.com/users/541076763728674836" target="_blank" rel="noopener">
+          <span class="icon-circle"><i class="fa-brands fa-discord"></i></span>
+          <span class="link-text">Discord</span>
+          <span class="arrow">→</span>
+        </a>
+
+        <a class="social-link" href="https://github.com/joreik" target="_blank" rel="noopener">
+          <span class="icon-circle"><i class="fa-brands fa-github"></i></span>
+          <span class="link-text">Github</span>
+          <span class="arrow">→</span>
+        </a>
+
+        <a class="social-link" href="https://youtube.com/@42-joreik" target="_blank" rel="noopener">
+          <span class="icon-circle"><i class="fa-brands fa-youtube"></i></span>
+          <span class="link-text">Youtube</span>
+          <span class="arrow">→</span>
+        </a>
+      </div>
+
+      <div class="player">
+        <div class="song-row">
+          <div class="song-title">Pocketful of Sunshine</div>
+
+          <a class="embed-link" href="https://www.youtube.com/watch?v=gte3BoXKwP0" target="_blank" rel="noopener">
+            <i class="fa-solid fa-arrow-up-right-from-square"></i>
+          </a>
+        </div>
+
+        <audio id="audio" src="assets/song.mp3" loop></audio>
+
+        <div class="player-controls">
+          <button id="playPause" type="button">
+            <i class="fa-solid fa-play"></i>
+          </button>
+
+          <span id="current">0:00</span>
+
+          <input type="range" id="progress" value="0" min="0" max="100">
+
+          <span id="duration">0:00</span>
+
+          <button id="volumeButton" type="button" aria-label="Mute volume">
+            <span id="volumeIcon" class="volume-symbol volume-medium">
+              <span class="speaker"></span>
+              <span class="wave wave-1"></span>
+              <span class="wave wave-2"></span>
+              <span class="wave wave-3"></span>
+              <span class="mute-x"></span>
+            </span>
+          </button>
+
+          <input type="range" id="volume" value="50" min="0" max="100">
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div id="cursor"></div>
+
+  <script type="module" src="views.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
