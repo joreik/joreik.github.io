@@ -1,3 +1,27 @@
+document.addEventListener("DOMContentLoaded", () => {
+  document.addEventListener("dragstart", (e) => e.preventDefault());
+
+  const audio = document.getElementById("audio");
+  const playPause = document.getElementById("playPause");
+  const progress = document.getElementById("progress");
+  const current = document.getElementById("current");
+  const duration = document.getElementById("duration");
+  const volume = document.getElementById("volume");
+  const volumeIcon = document.getElementById("volumeIcon");
+  const volumeButton = document.getElementById("volumeButton");
+  const enterScreen = document.getElementById("enter-screen");
+
+  const cursor = document.getElementById("cursor");
+  const card = document.getElementById("tilt-card");
+
+  let previousVolume = 0.5;
+  let entered = false;
+
+  audio.volume = 0.5;
+  volume.value = 50;
+
+  progress.style.setProperty("--fill", "0%");
+  volume.style.setProperty("--fill", "50%");
 
   if (cursor) {
     let mouseX = 0;
@@ -60,15 +84,15 @@
   function volumeSvg(level) {
     const waves = {
       muted: "",
-      low: `<path d="M18 9C19 10.2 19 13.8 18 15"/>`,
+      low: `<path d="M16 9C17 10.2 17 13.8 16 15"/>`,
       medium: `
-        <path d="M18 9C19 10.2 19 13.8 18 15"/>
-        <path d="M21 7C23 10 23 14 21 17"/>
+        <path d="M16 9C17 10.2 17 13.8 16 15"/>
+        <path d="M19 7C21 10 21 14 19 17"/>
       `,
       high: `
-        <path d="M18 9C19 10.2 19 13.8 18 15"/>
-        <path d="M21 7C23 10 23 14 21 17"/>
-        <path d="M24 5C27 9 27 15 24 19"/>
+        <path d="M16 9C17 10.2 17 13.8 16 15"/>
+        <path d="M19 7C21 10 21 14 19 17"/>
+        <path d="M22 5C25 9 25 15 22 19"/>
       `
     };
 
