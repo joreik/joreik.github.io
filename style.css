@@ -106,7 +106,7 @@ a {
     inset 0 1px 0 rgba(255, 255, 255, 0.12);
   transform-style: preserve-3d;
   will-change: transform;
-  transition: transform 0.14s ease, box-shadow 0.14s ease;
+  transition: transform .25s cubic-bezier(.22,1,.36,1);
   overflow: visible;
 }
 
@@ -269,8 +269,8 @@ p {
   place-items: center;
   background: rgba(255, 255, 255, 0.045);
   border: 1px solid rgba(255, 255, 255, 0.13);
-  backdrop-filter: blur(3px);
-  -webkit-backdrop-filter: blur(3px);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
   font-size: 18px;
 }
 
@@ -406,11 +406,9 @@ input[type="range"]::-moz-range-thumb {
 
 #cursor {
   position: fixed;
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
+  width: 8px;
+  height: 8px;
   background: white;
-  border: 2px solid black;
   pointer-events: none;
   z-index: 999999;
   transform: translate(-50%, -50%);
